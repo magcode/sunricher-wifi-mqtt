@@ -34,10 +34,11 @@ public class Client {
 		topic = args[1];
 		ledControllerHost = args[2];
 		ledControllerPort = new Integer(args[3]);
-
+		
 		// connect to controller
-		connectToController(false);
 		device = new DeviceHandlerImpl();
+		connectToController(false);
+		
 
 		// connect to MQTT broker
 		startMQTTClient();
