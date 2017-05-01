@@ -25,7 +25,7 @@ import java.net.UnknownHostException;
  * @author Florian Bornkessel
  * 
  */
-public class LK35DeviceHandlerImpl implements LK35DeviceHandler {
+public class DeviceHandlerImpl implements DeviceHandler {
 
 	private OutputStream os = null;
 	private Socket lkSocket = null;

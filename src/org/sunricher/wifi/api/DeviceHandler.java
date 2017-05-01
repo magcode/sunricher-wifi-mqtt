@@ -27,7 +27,7 @@ import java.net.UnknownHostException;
  * @author Florian Bornkessel
  * @version 0.9.0
  */
-public interface LK35DeviceHandler {
+public interface DeviceHandler {
 
 	/**
 	 * connect to LK-35 controller and create a session. The method returns an

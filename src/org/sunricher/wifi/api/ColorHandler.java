@@ -43,7 +43,7 @@ import java.util.List;
  * 
  * 
  */
-public interface LK35ColorHandler {
+public interface ColorHandler {
 
 	/**
 	 * set RGB for the given zones.
