@@ -23,7 +23,7 @@ public class Callback implements MqttCallback {
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		// so far implemented:
 		// .../1/brightness
-		// .../1/power
+		// .../1/power  payload "0" or "1"
 		String[] tops = topic.split("/");
 		String channel = tops[tops.length - 2];
 		if (!StringUtils.isNumeric(channel) || !StringUtils.isNumeric(message.toString())) {
@@ -31,10 +31,13 @@ public class Callback implements MqttCallback {
 		}
 		int chan = new Integer(channel);
 		int value = new Integer(message.toString());
-		if (tops[tops.length - 1].endsWith(BRIGHT)) {
-			ArrayList<Integer> zones = new ArrayList<Integer>();
-			zones.add(chan);
+		ArrayList<Integer> zones = new ArrayList<Integer>();
+		zones.add(chan);
+		switch (tops[tops.length - 1]) {
+		case BRIGHT:
 			ledHandler.setBrightness(zones, value);
+		case POW:
+			ledHandler.togglePower(zones, value == 1);
 		}
 
 		System.out.println(topic);
