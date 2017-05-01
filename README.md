@@ -1,6 +1,6 @@
 # sunricher-wifi-mqtt
 
-Controls LED devices from Sunricher ([http://www.sunricher.com/perfect-rf-system-series/wifi-transmitter.html]) using MQTT
+Controls LED devices from Sunricher [http://www.sunricher.com/perfect-rf-system-series/wifi-transmitter.html] using MQTT
 
 
 In order to build it run the following commands
@@ -15,7 +15,7 @@ java -jar target/sunricher-wifi-mqtt-0.2.0-SNAPSHOT-jar-with-dependencies.jar tc
 8899
 ```
 
-##Implemented commands##
+## Implemented commands ##
 The following commands are implemented:
 
 - power on/off a channel
@@ -23,21 +23,21 @@ The following commands are implemented:
 
 In case you miss commands please create a pull request or donate the hardware so that I can implement it.
 
-##Tested devices##
+## Tested devices ##
 - SR-2818WiN
 - SR-1009SAC-HP
 
-##Send MQTT commands##
+## Send MQTT commands ##
 You need to run a MQTT broker and you can controll the LEDs using a choosen topic.
 
-###Power On###
+### Power On ###
 
 ```
 myroom/lights/1/power
 ```
 Send `0` for Power Off and `1` for Power On.
 
-###Brightness###
+### Brightness ###
 
 ```
 myroom/lights/1/brightness
