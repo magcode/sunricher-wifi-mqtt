@@ -1,12 +1,14 @@
 # sunricher-wifi-mqtt
 
-Controls LED devices from Sunricher [http://www.sunricher.com/perfect-rf-system-series/wifi-transmitter.html] using MQTT
+Controls LED devices from Sunricher [http://www.sunricher.com/perfect-rf-system-series/wifi-transmitter.html] using MQTT.
+You need to own at least one WIFI-to-RF device (SR-2818WiN) and one RF receiver/actuator (e.g. SR-1009SAC-HP)
 
+The program is written in Java and acts as a "bridge". You can run it on almost any device which can run Java.
 
-In order to build it run the following commands
+To build run the following commands:
 ```
 mvn clean install
-java -jar target/sunricher-wifi-mqtt-<version>-jar-with-dependencies.jar <server e.g. tcp://192.168.155.20> <topic> <controller ip> <controller-port
+java -jar target/sunricher-wifi-mqtt-<version>-jar-with-dependencies.jar <protocol://mqtt broker> <topic> <LED controller ip> <LED controller-port
 ```
 
 Sample:
@@ -28,19 +30,19 @@ In case you miss commands please create a pull request or donate the hardware so
 - SR-1009SAC-HP
 
 ## Send MQTT commands ##
-You need to run a MQTT broker and you can controll the LEDs using a choosen topic.
+You need to run a MQTT broker and you can control the LEDs using a chosen topic.
 
 ### Power On ###
 
 ```
-myroom/lights/1/power
+myroom/lights/<channel 1...8>/power
 ```
 Send `0` for Power Off and `1` for Power On.
 
 ### Brightness ###
 
 ```
-myroom/lights/1/brightness
+myroom/lights/<channel 1...8>/brightness
 ```
 
-Send an integer between `0` and `255`
+Send a number between `0` and `255`
