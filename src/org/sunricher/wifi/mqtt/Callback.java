@@ -40,6 +40,7 @@ public class Callback implements MqttCallback {
 			int value = new Integer(message.toString());
 			value = new Double(value * 2.55).intValue();
 			ledHandler.setBrightness(zonesA, value);
+			break;
 		case POW:
 			value = 0;
 			if ("ON".equals(message.toString())) {
@@ -50,6 +51,7 @@ public class Callback implements MqttCallback {
 				value = new Integer(message.toString());
 			}
 			ledHandler.togglePower(zonesA, value == 1);
+			break;
 		}
 
 		System.out.println("topic:" + topic + " message:" + message.toString());

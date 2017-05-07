@@ -105,7 +105,7 @@ public class ColorHandlerImpl implements ColorHandler {
 	}
 
 	@Override
-	public void togglePower(List<Integer> zones, boolean powerState) throws IOException {
+	public void togglePower(List<Integer> zones, boolean powerState) throws IOException, InterruptedException {
 		// works
 		byte[] data = null;
 		for (int zone : zones) {
@@ -117,53 +117,61 @@ public class ColorHandlerImpl implements ColorHandler {
 				} else {
 					data = Constant.DATA_ROOM1_OFF;
 				}
+				break;
 			case 2:
 				if (powerState) {
 					data = Constant.DATA_ROOM2_ON;
 				} else {
 					data = Constant.DATA_ROOM2_OFF;
 				}
+				break;
 			case 3:
 				if (powerState) {
 					data = Constant.DATA_ROOM3_ON;
 				} else {
 					data = Constant.DATA_ROOM3_OFF;
 				}
+				break;
 			case 4:
 				if (powerState) {
 					data = Constant.DATA_ROOM4_ON;
 				} else {
 					data = Constant.DATA_ROOM4_OFF;
 				}
+				break;
 			case 5:
 				if (powerState) {
 					data = Constant.DATA_ROOM5_ON;
 				} else {
 					data = Constant.DATA_ROOM5_OFF;
 				}
+				break;
 			case 6:
 				if (powerState) {
 					data = Constant.DATA_ROOM6_ON;
 				} else {
 					data = Constant.DATA_ROOM6_OFF;
 				}
+				break;
 			case 7:
 				if (powerState) {
 					data = Constant.DATA_ROOM7_ON;
 				} else {
 					data = Constant.DATA_ROOM7_OFF;
 				}
+				break;
 			case 8:
 				if (powerState) {
 					data = Constant.DATA_ROOM8_ON;
 				} else {
 					data = Constant.DATA_ROOM8_OFF;
 				}
+				break;
 			}
 
 		}
 		if (null != data) {
-			os.write(this.getMessage(zones, data[0], data[1], data[2]));		
+			send(this.getMessage(zones, data[0], data[1], data[2]));
 		}
 	}
 
@@ -178,8 +186,7 @@ public class ColorHandlerImpl implements ColorHandler {
 		}
 
 		byte[] data = Constant.DATA_CIRCLE_DIM;
-		os.write(this.getMessage(zones, data[0], data[1], (byte) value));
-		Thread.sleep(SLEEP_AT_END);
+		send(this.getMessage(zones, data[0], data[1], (byte) value));
 	}
 
 	@Override
@@ -226,7 +233,7 @@ public class ColorHandlerImpl implements ColorHandler {
 	 * @param value
 	 * @return
 	 */
-	private byte[] getMessage(int zone, byte category, byte channel, int value) {
+	private byte[] getMessage(int zone, byte category, byte channel, byte value) {
 		ArrayList<Integer> zoneArray = new ArrayList<Integer>();
 		zoneArray.add(zone);
 		return this.getMessage(zoneArray, category, channel, value);
@@ -246,7 +253,9 @@ public class ColorHandlerImpl implements ColorHandler {
 	 *            constant or ar range (depends on function of that channel)
 	 * @return generated message, ready to send
 	 */
-	private byte[] getMessage(List<Integer> zones, byte category, byte channel, int value) {
+	private byte[] getMessage(List<Integer> zones, byte category, byte channel, byte value) {
+		byte[] bytes = new byte[] { category, channel, value };
+		//System.out.println(javax.xml.bind.DatatypeConverter.printHexBinary(bytes));
 		byte[] result = new byte[12];
 
 		// remote identifier
@@ -262,7 +271,7 @@ public class ColorHandlerImpl implements ColorHandler {
 		// color channel
 		result[7] = channel;
 		// value
-		result[8] = (byte) value;
+		result[8] = value;
 		// checksum
 		result[9] = (byte) (result[8] + result[7] + result[6] + result[5] + result[4]);
 		// marker bytes
@@ -275,5 +284,23 @@ public class ColorHandlerImpl implements ColorHandler {
 	@Override
 	public void saveCurrentColor(List<Integer> zones, int slot) throws IOException, InterruptedException {
 
+	}
+	
+	
+	private void send(byte[] bytes) {
+		try {
+			os.write(bytes);
+			os.flush();
+			os.write(bytes);
+			os.flush();	
+			os.write(bytes);
+			os.flush();	
+			Thread.sleep(SLEEP_AT_END);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 	}
 }

@@ -222,8 +222,9 @@ public interface ColorHandler {
 	 *            if set to false, the color is faded to black. if set to true,
 	 *            the last state will be restored.
 	 * @throws IOException
+	 * @throws InterruptedException 
 	 */
-	public void togglePower(List<Integer> zones, boolean powerState) throws IOException;
+	public void togglePower(List<Integer> zones, boolean powerState) throws IOException, InterruptedException;
 
 
 	/**
