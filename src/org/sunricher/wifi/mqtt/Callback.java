@@ -2,6 +2,7 @@ package org.sunricher.wifi.mqtt;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -22,7 +23,7 @@ public class Callback implements MqttCallback {
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		// so far implemented:
 		// .../1/brightness
-		// .../1,2/power payload "0" or "1"
+		// .../1,2/power payload "0" or "1" or "ON" or "OFF"
 
 		String[] tops = topic.split("/");
 		String channel = tops[tops.length - 2];
@@ -33,12 +34,21 @@ public class Callback implements MqttCallback {
 			int value = new Integer(aZone);
 			zonesA.add(value);
 		}
-		int value = new Integer(message.toString());
 
 		switch (tops[tops.length - 1]) {
 		case BRIGHT:
+			int value = new Integer(message.toString());
+			value = new Double(value * 2.55).intValue();
 			ledHandler.setBrightness(zonesA, value);
 		case POW:
+			value = 0;
+			if ("ON".equals(message.toString())) {
+				value = 1;
+			} else if ("OFF".equals(message.toString())) {
+				value = 0;
+			} else if (StringUtils.isNumeric(message.toString())) {
+				value = new Integer(message.toString());
+			}
 			ledHandler.togglePower(zonesA, value == 1);
 		}
 

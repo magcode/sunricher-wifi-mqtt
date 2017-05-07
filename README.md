@@ -38,7 +38,7 @@ You need to run a MQTT broker and you can control the LEDs using a chosen topic.
 myroom/lights/<channels>/power
 ```
 To specifiy the channel use e.g. `1` or a single channel or e.g. `2,3` for multiple channels.
-Send `0` for Power Off and `1` for Power On.
+Send `0` or `OFF` for Power Off and `1` or `ON` for Power On.
 
 
 ### Brightness ###
@@ -47,4 +47,4 @@ Send `0` for Power Off and `1` for Power On.
 myroom/lights/<channels>/brightness
 ```
 To specifiy the channel use e.g. `1` or a single channel or e.g. `2,3` for multiple channels.
-Send a number between `0` and `255`
+Send a number between `0` and `100`
