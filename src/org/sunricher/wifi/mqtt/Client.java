@@ -39,7 +39,6 @@ public class Client {
 		device = new DeviceHandlerImpl();
 		connectToController(false);
 		
-
 		// connect to MQTT broker
 		startMQTTClient();
 

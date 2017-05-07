@@ -107,8 +107,9 @@ public class ColorHandlerImpl implements ColorHandler {
 	@Override
 	public void togglePower(List<Integer> zones, boolean powerState) throws IOException {
 		// works
+		byte[] data = null;
 		for (int zone : zones) {
-			byte[] data = null;
+
 			switch (zone) {
 			case 1:
 				if (powerState) {
@@ -160,10 +161,9 @@ public class ColorHandlerImpl implements ColorHandler {
 				}
 			}
 
-			if (null != data) {
-				os.write(this.getMessage(zone, data[0], data[1], data[2]));
-			}
-
+		}
+		if (null != data) {
+			os.write(this.getMessage(zones, data[0], data[1], data[2]));		
 		}
 	}
 

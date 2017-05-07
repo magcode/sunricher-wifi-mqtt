@@ -35,14 +35,16 @@ You need to run a MQTT broker and you can control the LEDs using a chosen topic.
 ### Power On ###
 
 ```
-myroom/lights/<channel 1...8>/power
+myroom/lights/<channels>/power
 ```
+To specifiy the channel use e.g. `1` or a single channel or e.g. `2,3` for multiple channels.
 Send `0` for Power Off and `1` for Power On.
+
 
 ### Brightness ###
 
 ```
-myroom/lights/<channel 1...8>/brightness
+myroom/lights/<channels>/brightness
 ```
-
+To specifiy the channel use e.g. `1` or a single channel or e.g. `2,3` for multiple channels.
 Send a number between `0` and `255`
