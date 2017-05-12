@@ -3,6 +3,10 @@ package org.sunricher.wifi.mqtt;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -18,6 +22,7 @@ public class Client {
 	private static int ledControllerPort;
 	private static String topic;
 	private static DeviceHandler device = null;
+	private static TcpClient tcpClient;
 	private static MqttClient mqttClient;
 	private static boolean connecctionInProgress = false;
 	private static OutputStream sessionOutputStream = null;
@@ -34,14 +39,21 @@ public class Client {
 		topic = args[1];
 		ledControllerHost = args[2];
 		ledControllerPort = new Integer(args[3]);
-		
+
 		// connect to controller
-		device = new DeviceHandlerImpl();
-		connectToController(false);
-		
+		// device = new DeviceHandlerImpl();
+		// connectToController(false);
+		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+		tcpClient = new TcpClient(ledControllerHost, ledControllerPort);
+		tcpClient.init();
+		ledHandler = new ColorHandlerImpl(tcpClient.getOs());
 		// connect to MQTT broker
 		startMQTTClient();
 
+		
+		//UPDClient udpClient = new UPDClient();
+		//udpClient.start();
+		//ScheduledFuture<?> future = executor.scheduleAtFixedRate(new UDPHeartBeat(udpClient), 1, 5, TimeUnit.SECONDS);
 		// add handle for ctrl+c to disconnect
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 
@@ -49,9 +61,10 @@ public class Client {
 			public void run() {
 				try {
 					System.out.println("Disconnecting from server");
-					device.disconnect();
+					// device.disconnect();
 					mqttClient.disconnect();
-				} catch (IOException | MqttException e) {
+					tcpClient.disconnect();
+				} catch (MqttException e) {
 					// we cannot do much here.
 					e.printStackTrace();
 				}

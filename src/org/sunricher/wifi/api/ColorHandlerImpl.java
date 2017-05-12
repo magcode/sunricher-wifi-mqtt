@@ -255,7 +255,7 @@ public class ColorHandlerImpl implements ColorHandler {
 	 */
 	private byte[] getMessage(List<Integer> zones, byte category, byte channel, byte value) {
 		byte[] bytes = new byte[] { category, channel, value };
-		//System.out.println(javax.xml.bind.DatatypeConverter.printHexBinary(bytes));
+		
 		byte[] result = new byte[12];
 
 		// remote identifier
@@ -277,7 +277,7 @@ public class ColorHandlerImpl implements ColorHandler {
 		// marker bytes
 		result[10] = (byte) 0xaa;
 		result[11] = (byte) 0xaa;
-
+		//System.out.println(javax.xml.bind.DatatypeConverter.printHexBinary(result));
 		return result;
 	}
 
@@ -297,6 +297,7 @@ public class ColorHandlerImpl implements ColorHandler {
 			os.flush();	
 			Thread.sleep(SLEEP_AT_END);
 		} catch (IOException e) {
+			System.out.println("stream write error");
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

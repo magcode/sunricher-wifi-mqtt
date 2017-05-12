@@ -21,6 +21,7 @@ public class Constant {
 	public static final byte[] DATA_ROOM7_ON;
 	public static final byte[] DATA_ROOM8_OFF;
 	public static final byte[] DATA_ROOM8_ON;
+	public static final int UDP_DATA_SEND_PORT = 8899;
 
 	static {
 		DATA_OFF = new byte[] { (byte) 2, (byte) 18, (byte) -87 };
