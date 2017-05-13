@@ -2,6 +2,7 @@ package org.sunricher.wifi.mqtt;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.concurrent.Executors;
@@ -11,11 +12,13 @@ import java.util.concurrent.TimeUnit;
 
 public class TcpClient {
 	private ScheduledExecutorService executor;
-	private OutputStream os = null;
-	private Socket lkSocket = null;
+	private OutputStream outputStream = null;
+	private Socket socket = null;
+	private static final int keepAliveSeconds = 280;
 	private String host;
 	private int port;
 	ScheduledFuture<?> future;
+	private boolean connecctionInProgress = false;
 
 	public TcpClient(String aHost, int aPort) {
 		this.host = aHost;
@@ -24,64 +27,75 @@ public class TcpClient {
 
 	public void init() {
 		executor = Executors.newScheduledThreadPool(1);
-		future = executor.scheduleAtFixedRate(new TcpHeartBeat(this), 10, 280, TimeUnit.SECONDS);
-
+		future = executor.scheduleAtFixedRate(new TcpHeartBeat(this), keepAliveSeconds, keepAliveSeconds,
+				TimeUnit.SECONDS);
 		connect();
 	}
 
-	public void connect() {
-		try {
-			lkSocket = new Socket(host, port);
-			lkSocket.sendUrgentData(255);
-			os = lkSocket.getOutputStream();
-			// get shure that the controller gets some time before the first
-			// request will be send
-			Thread.sleep(200);
-			System.out.println("Connected");
-		} catch (InterruptedException e) {
-			// we cannot do much here.
-			e.printStackTrace();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public void shutDown() {
+		future.cancel(true);
+		disconnect();
+	}
+
+	private void connect() {
+
+		if (connecctionInProgress) {
+			System.out.println(
+					"Reconnecting to LED Controller will be ommitted because another process is trying to connect.");
+			return;
+		}
+
+		connecctionInProgress = true;
+
+		// close everything in case it was already connected
+		disconnect();
+		boolean connected = false;
+		System.out.println("Connecting to LED Controller...");
+
+		while (connected == false) {
+			try {
+
+				InetSocketAddress addr = new InetSocketAddress(host, port);
+				socket = new Socket();
+				socket.setSoTimeout(4000);
+				socket.connect(addr, 4000);
+				socket.sendUrgentData(255);
+				outputStream = socket.getOutputStream();
+				Thread.sleep(300);
+				System.out.println("Connected to LED Controller");
+				connected = true;
+			} catch (UnknownHostException e) {
+				System.out.println("Host unknown. Connection failed." + e.getStackTrace());
+				return;
+			} catch (InterruptedException | IOException e) {
+				try {
+					Thread.sleep(10000);
+				} catch (InterruptedException e1) {
+					// we cannot do much here.
+				}
+			}
 		}
 	}
 
-	public void disconnect() {
-		future.cancel(true);
-		if (os != null) {
+	private void disconnect() {
+		if (outputStream != null) {
 			try {
-				os.close();
-				os = null;
-				lkSocket.close();
-				lkSocket = null;
+				outputStream.close();
+				outputStream = null;
+				socket.close();
+				socket = null;
+				System.out.println("Disconnected from LED Controller");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
 
 	public void reconnect() {
-		if (os != null) {
-			try {
-				os.close();
-				os = null;
-				lkSocket.close();
-				lkSocket = null;
-				this.connect();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}		
+
 	}
 
 	public OutputStream getOs() {
-		return os;
+		return outputStream;
 	}
-
 }

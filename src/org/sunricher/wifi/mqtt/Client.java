@@ -1,31 +1,22 @@
 package org.sunricher.wifi.mqtt;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.UUID;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.sunricher.wifi.api.ColorHandler;
 import org.sunricher.wifi.api.ColorHandlerImpl;
-import org.sunricher.wifi.api.DeviceHandler;
-import org.sunricher.wifi.api.DeviceHandlerImpl;
 
 public class Client {
 	private static String mqttServer;
 	private static String ledControllerHost;
 	private static int ledControllerPort;
 	private static String topic;
-	private static DeviceHandler device = null;
 	private static TcpClient tcpClient;
 	private static MqttClient mqttClient;
-	private static boolean connecctionInProgress = false;
-	private static OutputStream sessionOutputStream = null;
 	private static ColorHandler ledHandler;
 
 	public static void main(String[] args) throws Exception {
@@ -40,32 +31,25 @@ public class Client {
 		ledControllerHost = args[2];
 		ledControllerPort = new Integer(args[3]);
 
-		// connect to controller
-		// device = new DeviceHandlerImpl();
-		// connectToController(false);
-		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 		tcpClient = new TcpClient(ledControllerHost, ledControllerPort);
 		tcpClient.init();
 		ledHandler = new ColorHandlerImpl(tcpClient.getOs());
 		// connect to MQTT broker
 		startMQTTClient();
 
-		
-		//UPDClient udpClient = new UPDClient();
-		//udpClient.start();
-		//ScheduledFuture<?> future = executor.scheduleAtFixedRate(new UDPHeartBeat(udpClient), 1, 5, TimeUnit.SECONDS);
+		// UPDClient udpClient = new UPDClient();
+		// udpClient.start();
+		// ScheduledFuture<?> future = executor.scheduleAtFixedRate(new
+		// UDPHeartBeat(udpClient), 1, 5, TimeUnit.SECONDS);
 		// add handle for ctrl+c to disconnect
 		Runtime.getRuntime().addShutdownHook(new Thread() {
-
 			@Override
 			public void run() {
 				try {
-					System.out.println("Disconnecting from server");
-					// device.disconnect();
 					mqttClient.disconnect();
-					tcpClient.disconnect();
+					System.out.println("Disconnected from MQTT server");
+					tcpClient.shutDown();
 				} catch (MqttException e) {
-					// we cannot do much here.
 					e.printStackTrace();
 				}
 			}
@@ -79,47 +63,5 @@ public class Client {
 		mqttClient.connect();
 		mqttClient.subscribe(topic + "/+/+");
 		System.out.println("Connected and subscribed to " + topic);
-	}
-
-	public static void connectToController(boolean reconnect) {
-		// if a thread was starting the reconnection progress we can stop right
-		// here
-		if (connecctionInProgress) {
-			System.out.println(
-					"Reconnecting to LED Controller will be ommitted because another process is trying to connect.");
-			return;
-		}
-
-		connecctionInProgress = true;
-		if (reconnect) {
-			System.out.println("Reconnecting to LED Controller");
-			try {
-				device.disconnect();
-			} catch (Exception e) {
-				System.out.println("error while trying to disconnect from device. continuing anyway");
-				e.printStackTrace();
-			}
-		} else {
-			System.out.println("Connecting to LED Controller");
-		}
-
-		boolean reconnected = false;
-
-		while (reconnected == false) {
-			try {
-				sessionOutputStream = device.connect(ledControllerHost, ledControllerPort);
-				reconnected = true;
-				System.out.println("Connection established.");
-				connecctionInProgress = false;
-				ledHandler = new ColorHandlerImpl(sessionOutputStream);
-			} catch (Exception e) {
-				System.out.println("(Re)connection failed. Waiting for 10 seconds.");
-				try {
-					Thread.sleep(10000);
-				} catch (InterruptedException e1) {
-					// we cannot do much here.
-				}
-			}
-		}
 	}
 }

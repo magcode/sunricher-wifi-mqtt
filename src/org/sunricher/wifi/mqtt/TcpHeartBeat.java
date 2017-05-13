@@ -1,14 +1,12 @@
 package org.sunricher.wifi.mqtt;
 
 import java.io.IOException;
-import java.net.SocketException;
 
 public class TcpHeartBeat implements Runnable {
 	private TcpClient client;
 
 	public TcpHeartBeat(TcpClient aClient) {
 		this.client = aClient;
-
 	}
 
 	@Override
