@@ -56,7 +56,7 @@ public class Client {
 
 	private static void startMQTTClient() throws MqttException {
 		System.out.println("Starting MQTT Client ...");
-		mqttClient = new MqttClient(mqttServer, UUID.randomUUID().toString());
+		mqttClient = new MqttClient(mqttServer, "Client-for-led-"+ledControllerHost);
 		mqttClient.setCallback(new Callback(ledHandler, udpClient));
 		mqttClient.connect();
 		mqttClient.subscribe(topic + "/+/+");

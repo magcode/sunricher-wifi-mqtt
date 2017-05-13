@@ -48,3 +48,23 @@ myroom/lights/<channels>/brightness
 ```
 To specifiy the channel use e.g. `1` or a single channel or e.g. `2,3` for multiple channels.
 Send a number between `0` and `100`
+
+## AT Commands ##
+
+You can control the LED controller WIFI module using AT commands.
+E.g. send the following commands via MQTT topic
+
+```
+myroom/lights/0/at
+```
+in order to disable WIFI (and save 1 Watt power consumption)
+
+```
+HF-A11ASSISTHREAD
+```
+```
++ok
+```
+```
+AT+MSLP=off
+```
