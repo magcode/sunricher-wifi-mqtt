@@ -20,7 +20,7 @@ public class TcpHeartBeat implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("No connection");
-			client.reconnect();
+			client.connect();
 		}
 	}
 }

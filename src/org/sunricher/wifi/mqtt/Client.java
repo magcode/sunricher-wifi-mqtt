@@ -1,7 +1,5 @@
 package org.sunricher.wifi.mqtt;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,6 +16,7 @@ public class Client {
 	private static TcpClient tcpClient;
 	private static MqttClient mqttClient;
 	private static ColorHandler ledHandler;
+	private static UPDClient udpClient;
 
 	public static void main(String[] args) throws Exception {
 		if (StringUtils.isBlank(args[0]) || StringUtils.isBlank(args[1]) || StringUtils.isBlank(args[2])
@@ -33,15 +32,14 @@ public class Client {
 
 		tcpClient = new TcpClient(ledControllerHost, ledControllerPort);
 		tcpClient.init();
-		ledHandler = new ColorHandlerImpl(tcpClient.getOs());
+
+		udpClient = new UPDClient(ledControllerHost);
+		udpClient.init();
+
+		ledHandler = new ColorHandlerImpl(tcpClient);
 		// connect to MQTT broker
 		startMQTTClient();
 
-		// UPDClient udpClient = new UPDClient();
-		// udpClient.start();
-		// ScheduledFuture<?> future = executor.scheduleAtFixedRate(new
-		// UDPHeartBeat(udpClient), 1, 5, TimeUnit.SECONDS);
-		// add handle for ctrl+c to disconnect
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public void run() {
@@ -59,7 +57,7 @@ public class Client {
 	private static void startMQTTClient() throws MqttException {
 		System.out.println("Starting MQTT Client ...");
 		mqttClient = new MqttClient(mqttServer, UUID.randomUUID().toString());
-		mqttClient.setCallback(new Callback(ledHandler));
+		mqttClient.setCallback(new Callback(ledHandler, udpClient));
 		mqttClient.connect();
 		mqttClient.subscribe(topic + "/+/+");
 		System.out.println("Connected and subscribed to " + topic);

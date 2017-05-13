@@ -1,33 +1,35 @@
 package org.sunricher.wifi.mqtt;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.sunricher.wifi.api.Constant;
 
 public class UPDClient {
-	private String ip = "192.168.155.19";
-	private String mac = "ACCF23CD3B50";
+	private String host;
 	private InetAddress inetAddress = null;
 	private DatagramSocket ds = null;
 
-	public String getIp() {
-		return ip;
+	public UPDClient(String aHost) {
+		this.host = aHost;
 	}
 
-	public void setIp(String ip) {
-		this.ip = ip;
-	}
-
-	public void start() {
+	public void init() {
 		try {
-			String network_address = StringUtils.substringBeforeLast(ip, ".") + ".255";
-			System.out.println("$    network_address = " + network_address);
+			String network_address = StringUtils.substringBeforeLast(this.host, ".") + ".255";
 			inetAddress = InetAddress.getByName(network_address);
-
 			setDs(new DatagramSocket(48899));
+
+			Executor executor = Executors.newSingleThreadExecutor();
+			executor.execute(new UDPListener(this));
+
 		} catch (SocketException | UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -50,11 +52,18 @@ public class UPDClient {
 		this.inetAddress = inetAddress;
 	}
 
-	public String getMac() {
-		return mac;
-	}
-
-	public void setMac(String mac) {
-		this.mac = mac;
+	public void send(String data) {
+		if (!data.equals("HF-A11ASSISTHREAD") && !data.equals("+ok")) {
+			data = data + "\n";
+		}
+		byte[] sendBytes = data.getBytes();
+		System.out.println(javax.xml.bind.DatatypeConverter.printHexBinary(sendBytes));
+		DatagramPacket datagram = new DatagramPacket(sendBytes, sendBytes.length, getInetAddress(), Constant.UDP_PORT);
+		try {
+			ds.send(datagram);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

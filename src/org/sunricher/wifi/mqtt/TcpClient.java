@@ -37,7 +37,7 @@ public class TcpClient {
 		disconnect();
 	}
 
-	private void connect() {
+	public void connect() {
 
 		if (connecctionInProgress) {
 			System.out.println(
@@ -89,10 +89,6 @@ public class TcpClient {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	public void reconnect() {
-
 	}
 
 	public OutputStream getOs() {

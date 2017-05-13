@@ -19,7 +19,7 @@ public class UDPHeartBeat implements Runnable {
 		try {
 			byte[] send_data = new byte[1];
 			DatagramPacket datagram = new DatagramPacket(send_data, send_data.length, client.getInetAddress(),
-					Constant.UDP_DATA_SEND_PORT);
+					Constant.TCP_PORT);
 			client.getDs().send(datagram);
 			System.out.println("Sent " + send_data);
 		} catch (IOException e) {

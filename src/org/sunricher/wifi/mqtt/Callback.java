@@ -11,10 +11,17 @@ import org.sunricher.wifi.api.ColorHandler;
 public class Callback implements MqttCallback {
 	private static final String BRIGHT = "brightness";
 	private static final String POW = "power";
+	private static final String AT = "at";
 	private static ColorHandler ledHandler;
+	private UPDClient updClient;
 
 	public Callback(ColorHandler aLedHandler) {
 		ledHandler = aLedHandler;
+	}
+
+	public Callback(ColorHandler aLedHandler, UPDClient anUdpClient) {
+		ledHandler = aLedHandler;
+		updClient = anUdpClient;
 	}
 
 	public void connectionLost(Throwable throwable) {
@@ -51,6 +58,9 @@ public class Callback implements MqttCallback {
 				value = new Integer(message.toString());
 			}
 			ledHandler.togglePower(zonesA, value == 1);
+			break;
+		case AT:
+			updClient.send(message.toString());
 			break;
 		}
 
