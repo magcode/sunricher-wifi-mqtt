@@ -13,7 +13,7 @@ java -jar target/sunricher-wifi-mqtt-<version>-jar-with-dependencies.jar <protoc
 
 Sample:
 ```
-java -jar target/sunricher-wifi-mqtt-0.2.0-SNAPSHOT-jar-with-dependencies.jar tcp://192.168.0.20 myroom/lights 192.168.0.123
+java -jar target/sunricher-wifi-mqtt-0.3.0-SNAPSHOT-jar-with-dependencies.jar tcp://192.168.0.20 myroom/lights 192.168.0.123
 8899
 ```
 
@@ -51,13 +51,15 @@ Send a number between `0` and `100`
 
 ## AT Commands ##
 
-You can control the LED controller WIFI module using AT commands.
-E.g. send the following commands via MQTT topic
+You can control the LED controller WiFi module (HF-A11) using AT commands.
+Use the following topic to send commands:
+
 
 ```
 myroom/lights/0/at
 ```
-in order to disable WIFI (and save 1 Watt power consumption)
+
+Example to disable WIFI (and save 1 Watt power consumption):
 
 ```
 HF-A11ASSISTHREAD
@@ -68,3 +70,16 @@ HF-A11ASSISTHREAD
 ```
 AT+MSLP=off
 ```
+
+# SR-2818WiN operating hints#
+You might want to use the LAN interface only and turn off WiFi in order to save some energy and improve security. This is possible.
+* Connect the SR-2818WiN to your wired local network
+* Reset the SR-2818WiN (holding reset button approx 5 seconds)
+* You should find the "EASYCOLOR" WiFi access point
+* Check your network router / DHCP server. The LAN interface of the device should have received an IP address in your local network.
+* Optional: make sure that the device always gets the same IP address from your network router / DHCP server.
+* Optional: disallow Internet access for this particular IP address in your network router.
+* Connect to this IP address with the tool as described above. (Do not connect to the wifi access point)
+* The connection should work and you should be able to control your LED receivers now
+* Now use the AT commands above to disable WIFI
+* In my case power consumption went down from 3.0 Watts (WIFI+LAN) to 2.1 Watts (LAN only)
