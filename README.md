@@ -1,20 +1,19 @@
 # sunricher-wifi-mqtt
 
-Controls LED devices from Sunricher [http://www.sunricher.com/perfect-rf-system-series/wifi-transmitter.html] using MQTT.
-You need to own at least one WIFI-to-RF device (SR-2818WiN) and one RF receiver/actuator (e.g. SR-1009SAC-HP)
+Controls LED devices from [Sunricher](http://www.sunricher.com/perfect-rf-system-series/wifi-transmitter.html) using MQTT.
+You need to own at least one WiFi-to-RF device (SR-2818WiN) and one RF receiver/actuator (e.g. SR-1009SAC-HP)
 
 The program is written in Java and acts as a "bridge". You can run it on almost any device which can run Java.
 
 To build run the following commands:
 ```
 mvn clean install
-java -jar target/sunricher-wifi-mqtt-<version>-jar-with-dependencies.jar <protocol://mqtt broker> <topic> <LED controller ip> <LED controller-port
+java -jar target/sunricher-wifi-mqtt-<version>-jar-with-dependencies.jar <protocol://mqtt broker> <topic> <LED controller ip>
 ```
 
 Sample:
 ```
 java -jar target/sunricher-wifi-mqtt-0.3.0-SNAPSHOT-jar-with-dependencies.jar tcp://192.168.0.20 myroom/lights 192.168.0.123
-8899
 ```
 
 ## Implemented commands ##
@@ -26,8 +25,8 @@ The following commands are implemented:
 In case you miss commands please create a pull request or donate the hardware so that I can implement it.
 
 ## Tested devices ##
-- SR-2818WiN
-- SR-1009SAC-HP
+- [SR-2818WiN](http://www.sunricher.com/wifi-rf-convertor-sr-2818win.html)
+- [SR-1009SAC-HP](http://www.sunricher.com/rf-wifi-control-ac-phase-cut-dimmer-with-push-dim-sr-1009sac-hp.html)
 
 ## Send MQTT commands ##
 You need to run a MQTT broker and you can control the LEDs using a chosen topic.
@@ -82,4 +81,4 @@ You might want to use the LAN interface only and turn off WiFi in order to save 
 * Connect to this IP address with the tool as described above. (Do not connect to the wifi access point)
 * The connection should work and you should be able to control your LED receivers now
 * Now use the AT commands above to disable WIFI
-* In my case power consumption went down from 3.0 Watts (WIFI+LAN) to 2.1 Watts (LAN only)
+* In my case power consumption went down from 3.0 Watts (WiFi+LAN) to 2.1 Watts (LAN only)

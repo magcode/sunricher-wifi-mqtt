@@ -74,7 +74,7 @@ public class ColorHandlerImpl implements ColorHandler {
 	@Override
 	public void togglePower(boolean powerState) throws IOException {
 		// works
-		byte[] data = powerState ? Constant.DATA_ON : Constant.DATA_OFF;
+		byte[] data = powerState ? Constants.DATA_ON : Constants.DATA_OFF;
 		// os.write(this.getMessage(new ArrayList<Integer>(), data[0], data[1],
 		// data[2]));
 	}
@@ -88,58 +88,58 @@ public class ColorHandlerImpl implements ColorHandler {
 			switch (zone) {
 			case 1:
 				if (powerState) {
-					data = Constant.DATA_ROOM1_ON;
+					data = Constants.DATA_ROOM1_ON;
 				} else {
-					data = Constant.DATA_ROOM1_OFF;
+					data = Constants.DATA_ROOM1_OFF;
 				}
 				break;
 			case 2:
 				if (powerState) {
-					data = Constant.DATA_ROOM2_ON;
+					data = Constants.DATA_ROOM2_ON;
 				} else {
-					data = Constant.DATA_ROOM2_OFF;
+					data = Constants.DATA_ROOM2_OFF;
 				}
 				break;
 			case 3:
 				if (powerState) {
-					data = Constant.DATA_ROOM3_ON;
+					data = Constants.DATA_ROOM3_ON;
 				} else {
-					data = Constant.DATA_ROOM3_OFF;
+					data = Constants.DATA_ROOM3_OFF;
 				}
 				break;
 			case 4:
 				if (powerState) {
-					data = Constant.DATA_ROOM4_ON;
+					data = Constants.DATA_ROOM4_ON;
 				} else {
-					data = Constant.DATA_ROOM4_OFF;
+					data = Constants.DATA_ROOM4_OFF;
 				}
 				break;
 			case 5:
 				if (powerState) {
-					data = Constant.DATA_ROOM5_ON;
+					data = Constants.DATA_ROOM5_ON;
 				} else {
-					data = Constant.DATA_ROOM5_OFF;
+					data = Constants.DATA_ROOM5_OFF;
 				}
 				break;
 			case 6:
 				if (powerState) {
-					data = Constant.DATA_ROOM6_ON;
+					data = Constants.DATA_ROOM6_ON;
 				} else {
-					data = Constant.DATA_ROOM6_OFF;
+					data = Constants.DATA_ROOM6_OFF;
 				}
 				break;
 			case 7:
 				if (powerState) {
-					data = Constant.DATA_ROOM7_ON;
+					data = Constants.DATA_ROOM7_ON;
 				} else {
-					data = Constant.DATA_ROOM7_OFF;
+					data = Constants.DATA_ROOM7_OFF;
 				}
 				break;
 			case 8:
 				if (powerState) {
-					data = Constant.DATA_ROOM8_ON;
+					data = Constants.DATA_ROOM8_ON;
 				} else {
-					data = Constant.DATA_ROOM8_OFF;
+					data = Constants.DATA_ROOM8_OFF;
 				}
 				break;
 			}
@@ -160,7 +160,7 @@ public class ColorHandlerImpl implements ColorHandler {
 			value = 0;
 		}
 
-		byte[] data = Constant.DATA_CIRCLE_DIM;
+		byte[] data = Constants.DATA_DIM_WHITE;
 		send(this.getMessage(zones, data[0], data[1], (byte) value));
 	}
 

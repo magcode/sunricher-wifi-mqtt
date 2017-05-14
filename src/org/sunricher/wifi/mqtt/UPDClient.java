@@ -10,7 +10,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.sunricher.wifi.api.Constant;
+import org.sunricher.wifi.api.Constants;
 
 public class UPDClient {
 	private String host;
@@ -53,12 +53,12 @@ public class UPDClient {
 	}
 
 	public void send(String data) {
-		if (!data.equals("HF-A11ASSISTHREAD") && !data.equals("+ok")) {
+		if (!data.equals(Constants.AT_ASSIST) && !data.equals(Constants.AT_OK)) {
 			data = data + "\n";
 		}
 		byte[] sendBytes = data.getBytes();
 		System.out.println(javax.xml.bind.DatatypeConverter.printHexBinary(sendBytes));
-		DatagramPacket datagram = new DatagramPacket(sendBytes, sendBytes.length, getInetAddress(), Constant.UDP_PORT);
+		DatagramPacket datagram = new DatagramPacket(sendBytes, sendBytes.length, getInetAddress(), Constants.UDP_PORT);
 		try {
 			ds.send(datagram);
 		} catch (IOException e) {

@@ -1,10 +1,10 @@
 package org.sunricher.wifi.api;
 
-public class Constant {
+public class Constants {
 
 	public static final byte[] DATA_OFF;
 	public static final byte[] DATA_ON;
-	public static final byte[] DATA_CIRCLE_DIM;
+	public static final byte[] DATA_DIM_WHITE;
 	public static final byte[] DATA_ROOM1_OFF;
 	public static final byte[] DATA_ROOM1_ON;
 	public static final byte[] DATA_ROOM2_OFF;
@@ -21,6 +21,10 @@ public class Constant {
 	public static final byte[] DATA_ROOM7_ON;
 	public static final byte[] DATA_ROOM8_OFF;
 	public static final byte[] DATA_ROOM8_ON;
+
+	public static final String AT_OK = "+ok";
+	public static final String AT_ASSIST = "HF-A11ASSISTHREAD";
+
 	public static final int TCP_PORT = 8899;
 	public static final int UDP_PORT = 48899;
 	static {
@@ -45,6 +49,6 @@ public class Constant {
 		byte[] bArr = new byte[3];
 		bArr[0] = (byte) 8;
 		bArr[1] = (byte) 56;
-		DATA_CIRCLE_DIM = bArr;
+		DATA_DIM_WHITE = bArr;
 	}
 }
