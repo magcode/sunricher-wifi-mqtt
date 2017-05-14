@@ -71,7 +71,7 @@ HF-A11ASSISTHREAD
 AT+MSLP=off
 ```
 
-# SR-2818WiN operating hints#
+# SR-2818WiN operating hints #
 You might want to use the LAN interface only and turn off WiFi in order to save some energy and improve security. This is possible.
 * Connect the SR-2818WiN to your wired local network
 * Reset the SR-2818WiN (holding reset button approx 5 seconds)
