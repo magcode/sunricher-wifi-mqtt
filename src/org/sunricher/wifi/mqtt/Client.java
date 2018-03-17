@@ -25,13 +25,12 @@ public class Client {
 		mqttServer = args[0];
 		topic = args[1];
 		ledControllerHost = args[2];
-
+		// tcpClient handles LED control messages
 		tcpClient = new TcpClient(ledControllerHost, Constants.TCP_PORT);
 		tcpClient.init();
-
+		// updClient handles AT commands for HF-11A module
 		udpClient = new UPDClient(ledControllerHost);
 		udpClient.init();
-
 		ledHandler = new ColorHandlerImpl(tcpClient);
 		// connect to MQTT broker
 		startMQTTClient();
@@ -56,6 +55,8 @@ public class Client {
 		mqttClient.setCallback(new Callback(ledHandler, udpClient));
 		mqttClient.connect();
 		mqttClient.subscribe(topic + "/+/+");
+		udpClient.setMqttClient(mqttClient);
+		udpClient.setMqttPublishTopic(topic + "/received");
 		System.out.println("Connected and subscribed to " + topic);
 	}
 }

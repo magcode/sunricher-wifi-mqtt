@@ -22,6 +22,7 @@ public class UDPListener implements Runnable {
 				int port = packet.getPort();
 				int len = packet.getLength();
 				byte[] data = packet.getData();
+				client.sendMqttMessage(data);
 
 				System.out.printf("Request from %s Port %d:%n%s%n", address, port,
 						new String(data, 0, len));
