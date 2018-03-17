@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.sunricher.wifi</groupId>
-	<artifactId>sunricher-wifi-mqtt</artifactId>
-	<version>0.4.0-SNAPSHOT</version>
+	<groupId>org.magcode</groupId>
+	<artifactId>sunricher-mqtt</artifactId>
+	<version>0.5.0-SNAPSHOT</version>
 	<repositories>
 		<repository>
 			<id>Eclipse Paho Repo</id>
@@ -27,7 +27,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.sunricher.wifi.mqtt.Client</mainClass>
+							<mainClass>org.magcode.sunricher.mqtt.SunricherClient</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
@@ -50,12 +50,17 @@
 		<dependency>
 			<groupId>org.eclipse.paho</groupId>
 			<artifactId>org.eclipse.paho.client.mqttv3</artifactId>
-			<version>1.0.2</version>
+			<version>1.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.10.0</version>
 		</dependency>
 	</dependencies>
 </project>

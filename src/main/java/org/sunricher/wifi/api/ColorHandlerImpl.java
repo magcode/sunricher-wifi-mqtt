@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.sunricher.wifi.mqtt.TcpClient;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.magcode.sunricher.mqtt.MqttSubscriber;
+import org.magcode.sunricher.mqtt.TcpClient;
 
 public class ColorHandlerImpl implements ColorHandler {
-
+	private static Logger logger = LogManager.getLogger(ColorHandlerImpl.class);
 	/**
 	 * sleep between two commands in a series
 	 */
@@ -179,8 +182,8 @@ public class ColorHandlerImpl implements ColorHandler {
 	}
 
 	/**
-	 * set bit for the corresponding zonenumber. If array is empty no bit will
-	 * be set.
+	 * set bit for the corresponding zonenumber. If array is empty no bit will be
+	 * set.
 	 * 
 	 * @param zones
 	 * @return
@@ -220,8 +223,8 @@ public class ColorHandlerImpl implements ColorHandler {
 	 * @param zones
 	 *            zones will be set in zonebit
 	 * @param category
-	 *            see category constants (different remote layouts are grouped
-	 *            in categories)
+	 *            see category constants (different remote layouts are grouped in
+	 *            categories)
 	 * @param channel
 	 *            channel or button name
 	 * @param value
@@ -271,10 +274,11 @@ public class ColorHandlerImpl implements ColorHandler {
 			tcpClient.getOs().flush();
 			Thread.sleep(SLEEP_AT_END);
 		} catch (IOException e) {
-			System.out.println("stream write error");
+			logger.error("Stream write error", e);
 			tcpClient.connect();
+			tcpClient.getUpdClient().sendDisableWifi();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			logger.error("Interrupted", e);
 		}
 	}
 }
