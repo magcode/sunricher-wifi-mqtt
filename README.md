@@ -5,7 +5,7 @@ You need to own at least one WiFi-to-RF device (SR-2818WiN) and one RF receiver/
 
 The program is written in Java and acts as a "bridge". You can run it on almost any device which can run Java.
 
-A configuration file `sunrichter.properties` is needed and must be located beside the *.jar file:
+A configuration file `sunricher.properties` is needed and must be located beside the *.jar file:
 
 ``` 
 mqttServer=<protocol and host of MQTT broker>
@@ -21,21 +21,18 @@ Example:
 mqttServer=tcp://192.168.0.2
 LOGLEVEL=DEBUG
 ledHost=192.168.0.3
-topic=home/led
+topic=myroom/lights
 disableWifi=true
 ```
 
 
 To build run the following commands:
+
 ```
 mvn clean install
 java -jar target/sunricher-mqtt-<version>-jar-with-dependencies.jar
 ```
 
-Sample:
-```
-java -jar target/sunricher-mqtt-0.5.0-SNAPSHOT-jar-with-dependencies.jar
-```
 A log file will be written: `led.log`.
 
 ## Implemented commands ##
