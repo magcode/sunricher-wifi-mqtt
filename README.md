@@ -5,16 +5,38 @@ You need to own at least one WiFi-to-RF device (SR-2818WiN) and one RF receiver/
 
 The program is written in Java and acts as a "bridge". You can run it on almost any device which can run Java.
 
+A configuration file `sunrichter.properties` is needed and must be located beside the *.jar file:
+
+``` 
+mqttServer=<protocol and host of MQTT broker>
+LOGLEVEL=<log level, e.g. ERROR,INFO,DEBUG,TRACE>
+ledHost=<host of sunricher device>
+topic=<mqtt topic>
+disableWifi=<true|false>
+```
+
+Example:
+
+``` 
+mqttServer=tcp://192.168.0.2
+LOGLEVEL=DEBUG
+ledHost=192.168.0.3
+topic=home/led
+disableWifi=true
+```
+
+
 To build run the following commands:
 ```
 mvn clean install
-java -jar target/sunricher-wifi-mqtt-<version>-jar-with-dependencies.jar <protocol://mqtt broker> <topic> <LED controller ip>
+java -jar target/sunricher-mqtt-<version>-jar-with-dependencies.jar
 ```
 
 Sample:
 ```
-java -jar target/sunricher-wifi-mqtt-0.3.0-SNAPSHOT-jar-with-dependencies.jar tcp://192.168.0.20 myroom/lights 192.168.0.123
+java -jar target/sunricher-mqtt-0.5.0-SNAPSHOT-jar-with-dependencies.jar
 ```
+A log file will be written: `led.log`.
 
 ## Implemented commands ##
 The following commands are implemented:
@@ -80,5 +102,5 @@ You might want to use the LAN interface only and turn off WiFi in order to save 
 * Optional: disallow Internet access for this particular IP address in your network router.
 * Connect to this IP address with the tool as described above. (Do not connect to the wifi access point)
 * The connection should work and you should be able to control your LED receivers now
-* Now use the AT commands above to disable WIFI
+* Now use the AT commands above to disable WIFI. Alternatively use the setting `disableWifi=true` in `sunricher.properties`
 * In my case power consumption went down from 3.0 Watts (WiFi+LAN) to 2.1 Watts (LAN only)
