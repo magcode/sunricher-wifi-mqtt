@@ -1,0 +1,12 @@
+Color colorSR "Sunricher Color" { mqtt=">[mosquitto:home/led/7/hsv:state:*:default]" }
+Dimmer dimColorSR "Sunricher Color Dim" { mqtt=">[mosquitto:home/led/7/rgbdim:state:*:default]" }
+Dimmer dimWhiteSR "Sunricher White Dim" { mqtt=">[mosquitto:home/led/7/white:state:*:JS(sunricherrgbw.js)]" }
+Dimmer dimRedSR "Sunricher Red Dim" { mqtt=">[mosquitto:home/led/7/red:state:*:JS(sunricherrgbw.js)]" }
+Dimmer dimGreenSR "Sunricher Green Dim" { mqtt=">[mosquitto:home/led/7/green:state:*:JS(sunricherrgbw.js)]" }
+Dimmer dimBlueSR "Sunricher Blue Dim" { mqtt=">[mosquitto:home/led/7/blue:state:*:JS(sunricherrgbw.js)]" }
+
+Dimmer dimBrightSR "Sunricher Brightness" { mqtt=">[mosquitto:home/led/7/brightness:state:*:default]" }
+Dimmer rgbProgramSR "Sunricher Color Dim" { mqtt=">[mosquitto:home/led/7/prg:state:*:default]" }
+Dimmer rgbProgramSpeedSR "Sunricher Color Dim" { mqtt=">[mosquitto:home/led/7/prgspeed:state:*:default]" }
+
+Switch switchSR "Sunricher ON/OFF" {mqtt=">[mosquitto:home/led/7/power:command:ON:1],>[mosquitto:home/led/7/power:command:OFF:0]"}

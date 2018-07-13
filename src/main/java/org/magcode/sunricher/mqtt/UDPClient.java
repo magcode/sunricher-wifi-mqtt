@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.sunricher.wifi.api.Constants;
+import org.magcode.sunricher.api.Constants;
 
 public class UDPClient {
 	private String host;

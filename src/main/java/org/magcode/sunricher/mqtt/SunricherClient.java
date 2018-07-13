@@ -12,31 +12,35 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LifeCycle;
+import org.apache.logging.log4j.core.config.Configurator;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
-
-import org.sunricher.wifi.api.ColorHandler;
-import org.sunricher.wifi.api.ColorHandlerImpl;
-import org.sunricher.wifi.api.Constants;
+import org.magcode.sunricher.api.Constants;
+import org.magcode.sunricher.api.WifiHandler;
+import org.magcode.sunricher.api.WifiHandlerImpl;
 
 public class SunricherClient {
 	private static String mqttServer;
 	private static String ledControllerHost;
+	private static int repeat;
 	private static String topic;
 	private static TcpClient tcpClient;
 	private static MqttClient mqttClient;
-	private static ColorHandler ledHandler;
+	private static WifiHandler ledHandler;
 	private static UDPClient udpClient;
 	private static boolean disableWifi = false;
+	private static String logLevel;
 
 	private static Logger logger = LogManager.getLogger(SunricherClient.class);
 
 	public static void main(String[] args) throws Exception {
 		readProps();
+		reConfigureLogger();
 		// updClient handles AT commands for HF-11A module
 		udpClient = new UDPClient(ledControllerHost);
 		udpClient.init();
@@ -47,7 +51,7 @@ public class SunricherClient {
 		tcpClient.init();
 		tcpClient.setUpdClient(udpClient);
 
-		ledHandler = new ColorHandlerImpl(tcpClient);
+		ledHandler = new WifiHandlerImpl(tcpClient, repeat);
 		// connect to MQTT broker
 		startMQTTClient();
 
@@ -87,11 +91,13 @@ public class SunricherClient {
 			input = new FileInputStream(filePath);
 			props.load(input);
 			mqttServer = props.getProperty("mqttServer", "tcp://localhost");
+			repeat = new Integer(props.getProperty("repeat", "4"));
 			topic = props.getProperty("topic", "home/led");
 			ledControllerHost = props.getProperty("ledHost", "192.168.0.1");
 			disableWifi = Boolean.parseBoolean(props.getProperty("disableWifi", "false"));
+			logLevel = props.getProperty("logLevel", "INFO");
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			logger.error("Cannot read properties", ex);
 		} finally {
 			if (input != null) {
 				try {
@@ -123,5 +129,16 @@ public class SunricherClient {
 		logger.info("Sending UDP messages to MQTT topic {}", topic + "/received");
 		udpClient.setMqttPublishTopic(topic + "/received");
 		logger.info("Subscribed to {}", topic);
+	}
+
+	/**
+	 * Reconfigures log4j2 and changes the filename. that might be helpful when
+	 * running multiple instances.
+	 */
+	private static void reConfigureLogger() {
+		org.apache.logging.log4j.core.LoggerContext ctx = (org.apache.logging.log4j.core.LoggerContext) LogManager
+				.getContext(false);
+		ctx.reconfigure();
+		Configurator.setRootLevel(Level.forName(logLevel, 0));
 	}
 }
