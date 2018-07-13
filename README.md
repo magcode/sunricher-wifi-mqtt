@@ -64,6 +64,7 @@ Be aware that with Sunricher devices it is not possible to read the current stat
 - [SR-1009FA](http://www.sunricher.com/5a-4ch-12-36v-constant-voltage-rf-led-strip-dimmer-controller-sr-1009fa.html)
 - [SR-1009HT](http://www.sunricher.com/high-voltage-led-strip-rf-controller-sr-1009ht.html)
 
+Thanks to @mshaposhnikov for generous support for this project.
 Please report more working devices via Pull Request for [README.md](https://github.com/magcode/sunricher-wifi-mqtt/blob/master/README.md) or via an [issue](https://github.com/magcode/sunricher-wifi-mqtt/issues).
 
 
