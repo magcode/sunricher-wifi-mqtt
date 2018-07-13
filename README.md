@@ -7,6 +7,8 @@ You need to own at least a WiFi-to-RF device (SR-2818WiN) and one RF receiver/ac
 The program is written in Java and acts as a "bridge". You can run it on almost any device which can run Java.
 
 # Installing and starting #
+
+Grab a [release](https://github.com/magcode/sunricher-wifi-mqtt/releases) or build it yourself (see below).
 A configuration file `sunricher.properties` is needed and must be located beside the *.jar file:
 
 ``` 
