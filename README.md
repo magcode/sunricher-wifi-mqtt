@@ -94,6 +94,13 @@ Send a number between `0` and `100`
 
 ### Color control ###
 
+#### Dim RGB ####
+```
+myroom/lights/<channels>/rgbdim
+```
+
+Send a number between `0` and `100` to set the RGB brightness.
+
 #### Set single channels directly ####
 
 ```
