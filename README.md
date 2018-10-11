@@ -13,6 +13,8 @@ A configuration file `sunricher.properties` is needed and must be located beside
 
 ``` 
 mqttServer=<protocol and host of MQTT broker>
+mqttUsername=<mqtt username>
+mqttPassword=<mqtt password>
 logLevel=<log level, e.g. ERROR,WARN,INFO,DEBUG,TRACE>
 ledHost=<host of sunricher device>
 topic=<mqtt topic>
@@ -23,6 +25,8 @@ Example:
 
 ``` 
 mqttServer=tcp://192.168.0.2
+mqttUsername=John
+mqttPassword=Doe
 LOGLEVEL=INFO
 ledHost=192.168.0.3
 topic=myroom/lights
