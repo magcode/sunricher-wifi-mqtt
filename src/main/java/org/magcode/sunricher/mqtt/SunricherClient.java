@@ -26,6 +26,9 @@ import org.magcode.sunricher.api.WifiHandlerImpl;
 
 public class SunricherClient {
 	private static String mqttServer;
+    private static String mqttUsername;
+    private static String mqttPassword;
+    private static int mqttVersion;
 	private static String ledControllerHost;
 	private static int repeat;
 	private static String topic;
@@ -91,6 +94,9 @@ public class SunricherClient {
 			input = new FileInputStream(filePath);
 			props.load(input);
 			mqttServer = props.getProperty("mqttServer", "tcp://localhost");
+            mqttUsername = props.getProperty("mqttUsername");
+            mqttPassword = props.getProperty("mqttPassword");
+            mqttVersion = new Integer(props.getProperty("mqttVersion", "3"));
 			repeat = new Integer(props.getProperty("repeat", "4"));
 			topic = props.getProperty("topic", "home/led");
 			ledControllerHost = props.getProperty("ledHost", "192.168.0.1");
@@ -121,8 +127,13 @@ public class SunricherClient {
 		connOpt.setCleanSession(false);
 		connOpt.setKeepAliveInterval(30);
 		connOpt.setAutomaticReconnect(true);
+        connOpt.setMqttVersion(mqttVersion);
+        if (mqttUsername != null && mqttPassword != null) {
+            connOpt.setUserName(mqttUsername);
+            connOpt.setPassword(mqttPassword.toCharArray());
+        }
 		mqttClient.setCallback(new MqttSubscriber(ledHandler, udpClient));
-		mqttClient.connect();
+		mqttClient.connect(connOpt);
 		logger.info("Connected to MQTT broker.");
 		mqttClient.subscribe(topic + "/+/+");
 		udpClient.setMqttClient(mqttClient);
