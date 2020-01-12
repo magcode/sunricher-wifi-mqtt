@@ -16,7 +16,8 @@ spec:
         - name: sunricher-mqtt
           image: dannyyy/sunricher-mqtt
           volumeMounts:
-            - mountPath: "/usr/app"
+            - mountPath: "/usr/app/sunricher.properties"
+              subPath: "sunricher.properties"
               name: sunricher-properties
               readOnly: true
       volumes:
