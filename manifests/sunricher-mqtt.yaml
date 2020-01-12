@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sunricher-mqtt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sunricher-mqtt
+  template:
+    metadata:
+      labels:
+        app: sunricher-mqtt
+    spec:
+      containers:
+        - name: sunricher-mqtt
+          image: dannyyy/sunricher-mqtt
+          volumeMounts:
+            - mountPath: "/usr/app"
+              name: sunricher-properties
+              readOnly: true
+      volumes:
+        - name: sunricher-properties
+          secret:
+            secretName: sunricher-properties
