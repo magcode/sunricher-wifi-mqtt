@@ -1,5 +1,7 @@
 # sunricher-wifi-mqtt
 
+**This code is not maintained anymore.**
+
 This tool controls Sunricher [Perfect RF](http://www.sunricher.com/perfect-rf-system-series/waterproof-perfect-rf-receiver.html) LED devices (SR-1009*) using MQTT.
 
 You need to own at least a WiFi-to-RF device (SR-2818WiN) and one RF receiver/actuator (e.g. SR-1009SAC-HP).
